@@ -6,7 +6,9 @@ case class Bill(orders: List[Order], serviceChoice: ServiceChoice = RegularServi
 
   def getServiceCharge: Double = {
     val multiplierList = orders.flatMap(item => item.orderItems.map(item => item._1.serviceChargeMultiplier))
-    val highestMultiplier = multiplierList.reduce { (a, b) => a max b }
+    println("multiplierList: " + multiplierList)
+    val highestMultiplier = multiplierList.max
+    println("highestMultiplier: " + highestMultiplier)
     highestMultiplier
   }
 
@@ -56,43 +58,41 @@ case class Bill(orders: List[Order], serviceChoice: ServiceChoice = RegularServi
     }
   }
 
-      def stampCard: Any  = {
-        val loyaltyCard = getLoyaltyCard
-        loyaltyCard match {
-          case Some(DrinksCard) if isDrinkInOrder => {
-            if (DrinksCard.countStamps < 10) {
-              println("this"+ loyaltyCard)
-              DrinksCard.addStamp(loyaltyCard)
-            } else {
-              DrinksCard.useStamps(Some(loyaltyCard))
-            }
-          }
-          case Some(DiscountCard) => 2
-          case None => None
+  def stampCard: Any = {
+    val loyaltyCard = getLoyaltyCard
+    println("stampcard" + loyaltyCard)
+    loyaltyCard match {
+      case Some(DrinksCard(_)) if isDrinkInOrder(orders) => {
+        if (loyaltyCard.map(_.getPoints.length).getOrElse(0) > 10) {
+          orders.head.customer.useStamps
+        } else {
+          orders.head.customer.addStamp
         }
       }
-  def isDrinkInOrder: Boolean = {
-    val foodList = orders.flatMap(item => item.orderItems.map(item => item._1))
-    val checkForDrink = foodList.exists {
-      case (food: Drink) => true
-      case _ => false
+      case Some(DiscountCard(_)) if getNetTotal > 20 && loyaltyCard.exists(_.points.length < 8) => {
+        orders.head.customer.addStamp
+      }
+      case None => None
     }
-    checkForDrink
+  }
+    def isDrinkInOrder(orders: List[Order]): Boolean = {
+      val foodList = orders.flatMap(item => item.orderItems.map(item => item._1))
+      val checkForDrink = foodList.exists {
+        case (food: Drink) => true
+        case _ => false
+      }
+      checkForDrink
+    }
   }
 
 
-}
-  //object bill {
-  //  val finalBill = Bill(orders = ???, serviceChoice = ???, serviceAmount = ???)
-  //}
+sealed trait ServiceChoice
 
-  sealed trait ServiceChoice
+case object NoServiceCharge extends ServiceChoice
 
-  case object NoServiceCharge extends ServiceChoice
+case object RegularServiceCharge extends ServiceChoice
 
-  case object RegularServiceCharge extends ServiceChoice
+case object AdditionalService extends ServiceChoice
 
-  case object AdditionalService extends ServiceChoice
-
-  case object ReplaceServiceCharge extends ServiceChoice
+case object ReplaceServiceCharge extends ServiceChoice
 

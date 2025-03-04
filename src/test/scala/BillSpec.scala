@@ -2,7 +2,7 @@ import CafeLogic.{coke, lan, lanNone, lemonade, pie, roast, sandwich, steak}
 import org.scalatest.wordspec.AnyWordSpec
 
 class BillSpec extends AnyWordSpec {
-  val bill = Bill
+
   val drinksOnlyOrder: Order = Order(List((coke, 1), (lemonade, 2)), lanNone) // 3
   val coldFoodOrder: Order = Order(List((sandwich, 1), (lemonade, 2)), lanNone) // 4
   val hotFoodOrder: Order = Order(List((coke, 1), (lemonade, 2), (pie, 2)), lanNone) // 9

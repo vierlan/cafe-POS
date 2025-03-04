@@ -1,6 +1,6 @@
 import java.time.LocalDate
 
-object CafeLogic extends App {
+object CafeLogic {
 
   val coke: Drink = Drink("Coke", 1.00, 10)
   val lemonade: Drink = Drink("Lemonade", 1.00, 10)
@@ -12,8 +12,11 @@ object CafeLogic extends App {
   val fish: PremiumFood = PremiumFood("Fish", 5.00, 5)
   val roast: PremiumFood = PremiumFood("Roast", 5.00, 0)
   val lanNone: Customer = Customer("Lan", None, LocalDate.of(1978,2,10))
-  val lan: Customer = Customer("Lan", Some(DrinksCard), LocalDate.of(1978,2,10))
+  val lan: Customer = Customer("Lan", Some(DrinksCard(List(1,1,1,1))), LocalDate.of(1978,2,10))
+  val lanExtendCard: Customer = Customer("lan", Some(DiscountCard(Nil)), LocalDate.of(1978,2,11))
   val orderHotFood = Order(List((coke, 1), (pie,2)), lan)
+  val foodOnlyOrder = Order(List((pie,2)), lan)
+  val billFoodOnly = Bill(List(foodOnlyOrder), RegularServiceCharge, None)
   val billHotFood = Bill(List(orderHotFood), RegularServiceCharge,None)
   val largeOrderWithPremium = Order(List((lemonade,2), (coke, 1), (roast, 1),(fish,2)), lan)
   val tooBigOrder = Order(List((lemonade,20), (coke, 1), (roast, 1),(fish,2)), lan)
@@ -39,7 +42,7 @@ object CafeLogic extends App {
   println(firstMenu.addPremiumFood((PremiumFood("Seafood Platter", 50.00, 2))))
   println(tooBigOrder.processOrder(tooBigOrder.orderItems))
   println(billHotFood.getLoyaltyCard)
-  println(billHotFood.isDrinkInOrder)
-  println(billHotFood.stampCard)
-
+  println(billHotFood.isDrinkInOrder(billHotFood.orders))
+  println(billFoodOnly.isDrinkInOrder(billFoodOnly.orders))
+  println("not working?: " + billHotFood.stampCard)
 }

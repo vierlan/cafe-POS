@@ -55,7 +55,7 @@ Remember some of the key lessons we've learnt about developing something:
     - Premium menu items are excluded from this discount.
     - To qualify for this discount card, their total spend over a minimum of 5 purchases needs to be £150.
     - E.g. if a customer purchased 4 times, each a minimum of £20, on 4 different days, they will be entitled to a discount of 8% on every purchase (regardless of total price). They can redeem this discount with every purchase, multiple times per day. On their 5th purchase of minimum £20 (after discount scheme), they will receive their 8% discount and a star (taking them to 5).
-
+   ### what does it mean to qualify for the card? Must the customer have made purchases totalling > £150 && paid more than 4 times before they can start receiving their first Stamp?
 
 ### Extension 2 - Multi-Currency & Staff Discount
 This is an airport café.
@@ -71,6 +71,8 @@ Implement happy hour functionality where drinks are half price between 6pm and 7
 *(HINT: Check out the `java.time` library).*
 
 During happy hour, loyalty cards do not apply to discounted drink purchases but will still work with food items.
+
+### Does this mean that the Drinks card will not be usable at all and discountcard will applydiscounts on Food only?
 
 ### Extension 4 - Bill Enhancements
 Add additional details to the produced bill:
