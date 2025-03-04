@@ -1,16 +1,12 @@
 import scala.collection.IterableOnce.iterableOnceExtensionMethods
 import scala.collection.immutable.Nil.forall
 
-case class Order(orderItems: List[(Food, Int)], table: Int) {
-  val takeOut: Boolean = if (table == 0) true else false
-}
-
-object Order {
+case class Order(orderItems: List[(Food, Int)], customer: Customer) {
 
   def processOrder(orderItems: List[(Food, Int)]): Either[Errors, List[Food]] = {
     val enoughStock = checkEnoughStock(orderItems, Nil)
-    if (enoughStock.contains(false)) {
-      Left(NoStockError("stock to fulfill the order(processOrder Error"))
+    if (enoughStock.isLeft) {
+      Left(NoStockError("Not enough stock to fulfill the order"))
   } else {
       Right(orderItems.map(item => depleteStock(item)))
     }
@@ -25,13 +21,14 @@ object Order {
     }
   }
 
-  def checkEnoughStock(orderItems: List[(Food, Int)],acc: List[Boolean]): Either[Errors, List[Boolean]] = {
+  def checkEnoughStock(orderItems: List[(Food, Int)],acc: List[Food]): Either[Errors, List[Food]] = {
     if (orderItems.isEmpty) Right(acc)
     else {
        val item = orderItems.head
        val tail = orderItems.tail
+        println(tail, acc)
         if (item._1.inventory > item._2) {
-          checkEnoughStock(tail, true :: acc)
+          checkEnoughStock(tail, item._1 :: acc)
         } else {
           Left(NoStockError(s"$item"))
         }

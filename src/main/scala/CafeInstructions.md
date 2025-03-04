@@ -28,7 +28,7 @@ Remember some of the key lessons we've learnt about developing something:
 - Take a customer order and produce an itemised bill which includes an optional service charge.
 
 #### Service Charge:
-- When all purchased items are no service charge is applied.
+- When all purchased items are drinks no service charge is applied.
 - When purchased items include any cold food, apply a service charge of 10% to the total bill (rounded to 2 decimal places).
 - When purchased items include any hot food apply a service charge of 20% to the total bill.
 - If a premium special is purchased, a service charge of 25% is added to the total bill.
